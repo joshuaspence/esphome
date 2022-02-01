@@ -341,6 +341,7 @@ def null(value):
         return None
     raise Invalid(f"Expected null value, but cannot convert {value} to null")
 
+
 @jschema_composite
 def ensure_list(*validators):
     """Validate this configuration option to be a list.

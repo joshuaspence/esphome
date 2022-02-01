@@ -131,6 +131,15 @@ ADCSensor = adc_ns.class_(
     "ADCSensor", sensor.Sensor, cg.PollingComponent, voltage_sampler.VoltageSampler
 )
 
+
+def null(value):
+    if value is None:
+        return value
+    if isinstance(value, str) and value in (""):
+        return None
+    raise cv.Invalid(f"Expected null value, but cannot convert {value} to null")
+
+
 CONFIG_SCHEMA = cv.All(
     sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
@@ -144,7 +153,7 @@ CONFIG_SCHEMA = cv.All(
             cv.Required(CONF_PIN): validate_adc_pin,
             cv.Optional(CONF_RAW, default=False): cv.boolean,
             cv.SplitDefault(CONF_ATTENUATION, esp32="0db"): cv.Any(
-                cv.null,
+                null,
                 cv.All(cv.only_on_esp32, cv.enum(ATTENUATION_MODES, lower=True)),
             ),
         }
